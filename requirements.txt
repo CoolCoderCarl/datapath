@@ -1,0 +1,4 @@
+black
+isort
+pyinstaller
+dynaconf~=3.1.11

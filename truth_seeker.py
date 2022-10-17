@@ -1,7 +1,8 @@
 from newsapi import NewsApiClient
+import dynaconfig
 # https://newsapi.org/
 
-API_KEY = ""
+API_KEY = dynaconfig.config["API_KEY"]
 
 newsapi = NewsApiClient(api_key=API_KEY)
 

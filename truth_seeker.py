@@ -1,5 +1,7 @@
 from newsapi import NewsApiClient
+
 import dynaconfig
+
 # https://newsapi.org/
 
 API_KEY = dynaconfig.config["API_KEY"]
@@ -7,8 +9,7 @@ API_KEY = dynaconfig.config["API_KEY"]
 newsapi = NewsApiClient(api_key=API_KEY)
 
 # TRY
-all_articles = newsapi.get_everything(q="test",
-                                      sort_by="popularity")
+all_articles = newsapi.get_everything(q="test", sort_by="popularity")
 
 # print(all_articles)
 

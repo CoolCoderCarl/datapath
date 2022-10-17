@@ -1,3 +1,5 @@
+import logging
+
 from newsapi import NewsApiClient
 
 import dynaconfig
@@ -8,10 +10,31 @@ API_KEY = dynaconfig.config["API_KEY"]
 
 newsapi = NewsApiClient(api_key=API_KEY)
 
-try:
-    all_articles = newsapi.get_everything(q="test", sort_by="popularity")
+# Logging
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO
+)
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s", level=logging.WARNING
+)
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s", level=logging.ERROR
+)
 
-    for k_a, v_a in all_articles.items():
+
+def fetch_info(query: str):
+    try:
+        result = newsapi.get_everything(q=query, sort_by="popularity")
+        logging.info(f"Searching for {query}")
+        return result
+    except ConnectionError as con_err:
+        logging.error(con_err)
+    except BaseException as base_err:
+        logging.error(base_err)
+
+
+def list_info():
+    for k_a, v_a in fetch_info("test").items():
         print(k_a, v_a)
         if k_a == "articles":
             for list_i in v_a:
@@ -21,11 +44,6 @@ try:
                 for k, v in list_i.items():
                     print(k, v)
 
-except ConnectionError as con_err:
-    print(con_err)
-except BaseException as base_err:
-    print(base_err)
 
-# print(all_articles)
-
-
+if __name__ == "__main__":
+    list_info()

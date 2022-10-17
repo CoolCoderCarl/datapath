@@ -39,7 +39,7 @@ jobs:
 
       - name: Set tag version to output
         id: set_current_tag_id
-        run: echo "::set-output name=current_tag::${{ steps.tag_version.outputs.new_tag }}"
+        run: echo "CURRENT_TAG=${{ steps.tag_version.outputs.new_tag }}" >> $GITHUB_OUTPUT
 
       - name: Notify if failure
         if: ${{ failure() }}
@@ -126,7 +126,7 @@ jobs:
 
             <b>WorkFlows:</b> <a href="https://github.com/${{ github.repository }}/actions">ActionsList</a>
 
-            Commit with tag: ${{ needs.prepare.outputs.get_current_tag }}
+            Commit with tag: ${{ needs.prepare.outputs.CURRENT_TAG }}
 
             Repository: ${{ github.repository }}
 

@@ -13,8 +13,6 @@ jobs:
   prepare:
     name: Prepare env & label
     runs-on: ubuntu-latest
-    outputs:
-      get_current_tag: ${{ steps.set_current_tag_id.outputs.current_tag }}
     steps:
 
       - name: Checkout code

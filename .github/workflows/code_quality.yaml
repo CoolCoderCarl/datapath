@@ -51,7 +51,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Testing
-        run: pytest -v tests/truth_tester.py
+        run: pytest -v
 
       - name: Notify if failure
         if: ${{ failure() }}

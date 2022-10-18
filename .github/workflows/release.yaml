@@ -79,7 +79,7 @@ jobs:
 
       - name: Set Release URL
         id: set_release_url
-        run: echo "RELEASE_URL=${{ steps.create_release.outputs.upload_url }}" >> $GITHUB_OUTPUT
+        run: echo "RELEASE_URL=${{ steps.create_release.outputs.upload_url }}" >> $GITHUB_ENV
 
       - name: Notify if failure
         if: ${{ failure() }}
@@ -178,12 +178,12 @@ jobs:
 
             <b>WorkFlows:</b> <a href="https://github.com/${{ github.repository }}/actions">ActionsList</a>
 
-            Commit with tag: ${{ needs.prepare.outputs.CURRENT_TAG }}
+            Commit with tag: ${{ env.CURRENT_TAG }}
 
             Repository: ${{ github.repository }}
 
             Branch: ${{ github.ref }}
 
-            <b>Release URL:</b> https://github.com/${{ github.repository }}/releases/tag/${{ needs.prepare.outputs.get_current_tag }}
+            <b>Release URL:</b> https://github.com/${{ github.repository }}/releases/tag/${{ env.CURRENT_TAG }}
 
             See changes: https://github.com/${{ github.repository }}/commit/${{ github.sha }}

@@ -60,12 +60,12 @@ jobs:
         include:
           - os: windows-latest
             TARGET: windows
-            CMD_BUILD: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F truth_seeker.py
+            CMD_BUILD: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F ./app/truth_seeker.py
             OUT_FILE_NAME: truth_seeker.exe
             ASSET_MIME: application/vnd.microsoft.portable-executable
           - os: ubuntu-latest
             TARGET: ubuntu
-            CMD_BUILD: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F truth_seeker.py
+            CMD_BUILD: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F ./app/truth_seeker.py
             OUT_FILE_NAME: truth_seeker
             ASSET_MIME: application/x-binary
 
@@ -124,7 +124,7 @@ jobs:
 
             <b>WorkFlows:</b> <a href="https://github.com/${{ github.repository }}/actions">ActionsList</a>
 
-            Commit with tag: ${{ needs.prepare.outputs.CURRENT_TAG }}
+            Commit with tag: ${{ env.CURRENT_TAG }}
 
             Repository: ${{ github.repository }}
 

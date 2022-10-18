@@ -41,6 +41,11 @@ jobs:
           echo "CURRENT_TAG=${{ steps.tag_version.outputs.new_tag }}"
           echo "CURRENT_TAG=${{ steps.tag_version.outputs.new_tag }}" >> $GITHUB_ENV
 
+      - name: Echo env var
+        run: |
+          echo "${{ env.CURRENT_TAG }}"
+
+
       - name: Notify if failure
         if: ${{ failure() }}
         uses: appleboy/telegram-action@master

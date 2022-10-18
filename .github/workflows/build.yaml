@@ -13,6 +13,8 @@ jobs:
   prepare:
     name: Prepare env & label
     runs-on: ubuntu-latest
+    outputs:
+      get_current_tag: ${{ steps.set_current_tag_id.outputs.current_tag }}
     steps:
 
       - name: Checkout code
@@ -37,7 +39,7 @@ jobs:
 
       - name: Set tag version to output
         id: set_current_tag_id
-        run: echo "CURRENT_TAG=${{ steps.tag_version.outputs.new_tag }}" >> $GITHUB_ENV
+        run: echo "::set-output name=current_tag::${{ steps.tag_version.outputs.new_tag }}"
 
       - name: Notify if failure
         if: ${{ failure() }}
@@ -124,7 +126,7 @@ jobs:
 
             <b>WorkFlows:</b> <a href="https://github.com/${{ github.repository }}/actions">ActionsList</a>
 
-            Commit with tag: ${{ env.CURRENT_TAG }}
+            Commit with tag: ${{ needs.prepare.outputs.get_current_tag }}
 
             Repository: ${{ github.repository }}
 

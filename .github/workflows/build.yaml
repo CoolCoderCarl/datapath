@@ -13,8 +13,6 @@ jobs:
   prepare:
     name: Prepare env & label
     runs-on: ubuntu-latest
-    outputs:
-      get_current_tag: ${{ steps.set_current_tag_id.outputs.current_tag }}
     steps:
 
       - name: Checkout code
@@ -39,7 +37,7 @@ jobs:
 
       - name: Set tag version to output
         id: set_current_tag_id
-        run: echo "::set-output name=current_tag::${{ steps.tag_version.outputs.new_tag }}"
+        run: echo "CURRENT_TAG=${{ steps.tag_version.outputs.new_tag }}" >> $GITHUB_ENV
 
       - name: Notify if failure
         if: ${{ failure() }}
@@ -62,12 +60,12 @@ jobs:
         include:
           - os: windows-latest
             TARGET: windows
-            CMD_BUILD: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F truth_seeker.py
+            CMD_BUILD: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F ./app/truth_seeker.py
             OUT_FILE_NAME: truth_seeker.exe
             ASSET_MIME: application/vnd.microsoft.portable-executable
           - os: ubuntu-latest
             TARGET: ubuntu
-            CMD_BUILD: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F truth_seeker.py
+            CMD_BUILD: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F ./app/truth_seeker.py
             OUT_FILE_NAME: truth_seeker
             ASSET_MIME: application/x-binary
 
@@ -126,7 +124,7 @@ jobs:
 
             <b>WorkFlows:</b> <a href="https://github.com/${{ github.repository }}/actions">ActionsList</a>
 
-            Commit with tag: ${{ needs.prepare.outputs.get_current_tag }}
+            Commit with tag: ${{ env.CURRENT_TAG }}
 
             Repository: ${{ github.repository }}
 

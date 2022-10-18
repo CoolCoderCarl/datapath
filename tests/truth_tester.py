@@ -15,5 +15,3 @@ def test_fetch_info_empty():
     :return:
     """
     return isinstance(truth_seeker.fetch_info(""), dict)
-
-

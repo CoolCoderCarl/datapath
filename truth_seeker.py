@@ -22,28 +22,33 @@ logging.basicConfig(
 )
 
 
-def fetch_info(query: str):
+def fetch_info(query: str) -> dict:
     try:
         result = newsapi.get_everything(q=query, sort_by="popularity")
         logging.info(f"Searching for {query}")
         return result
     except ConnectionError as con_err:
         logging.error(con_err)
+        return {}
     except BaseException as base_err:
         logging.error(base_err)
+        return {}
 
 
-def list_info():
-    for k_a, v_a in fetch_info("test").items():
-        print(k_a, v_a)
-        if k_a == "articles":
-            for list_i in v_a:
-                print("=======================")
-                print("NEW NEWS")
-                print("=======================")
-                for k, v in list_i.items():
-                    print(k, v)
+def list_info(fetch_info: dict):
+    if fetch_info:
+        for article in fetch_info.get("articles"):
+            for article_point, article_data in article.items():
+                if article_point == "urlToImage":
+                    continue
+                elif article_point == "source":
+                    print(article_point.capitalize(), article_data.get("name"))
+                else:
+                    print(article_point.capitalize(), article_data)
+    else:
+        logging.warning("Empty response from API")
+        raise IndexError
 
 
 if __name__ == "__main__":
-    list_info()
+    list_info(fetch_info("test"))

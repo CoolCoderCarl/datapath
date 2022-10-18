@@ -37,7 +37,13 @@ jobs:
 
       - name: Set tag version to output
         id: set_current_tag_id
-        run: echo "CURRENT_TAG=${{ steps.tag_version.outputs.new_tag }}" >> $GITHUB_ENV
+        run: |
+          echo "CURRENT_TAG=${{ steps.tag_version.outputs.new_tag }}"
+          echo "CURRENT_TAG=${{ steps.tag_version.outputs.new_tag }}" >> $GITHUB_OUTPUT
+
+      - name: Echo env var
+        run: |
+          echo "${{ env.CURRENT_TAG }}"
 
       - name: Notify if failure
         if: ${{ failure() }}
@@ -83,6 +89,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          echo "${{ needs.prepare.outputs.CURRENT_TAG }}"
 
       - name: Build with pyinstaller for ${{ matrix.TARGET }}
         run: ${{ matrix.CMD_BUILD }}
@@ -124,7 +131,7 @@ jobs:
 
             <b>WorkFlows:</b> <a href="https://github.com/${{ github.repository }}/actions">ActionsList</a>
 
-            Commit with tag: ${{ env.CURRENT_TAG }}
+            Commit with tag: ${{ needs.prepare.outputs.CURRENT_TAG }}
 
             Repository: ${{ github.repository }}
 

@@ -103,12 +103,12 @@ jobs:
         include:
           - os: windows-latest
             TARGET: windows
-            CMD_BUILD: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F truth_seeker.py
+            CMD_BUILD: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F ./app/truth_seeker.py
             OUT_FILE_NAME: truth_seeker.exe
             ASSET_MIME: application/vnd.microsoft.portable-executable
           - os: ubuntu-latest
             TARGET: ubuntu
-            CMD_BUILD: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F truth_seeker.py
+            CMD_BUILD: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F ./app/truth_seeker.py
             OUT_FILE_NAME: truth_seeker
             ASSET_MIME: application/x-binary
 
@@ -143,7 +143,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ needs.release.outputs.RELEASE_URL }}
+          upload_url: ${{ env.RELEASE_URL }}
           asset_path: ./dist/${{ matrix.OUT_FILE_NAME }}
           asset_name: ${{ matrix.OUT_FILE_NAME }}
           asset_content_type: ${{ matrix.ASSET_MIME }}

@@ -1,14 +1,16 @@
 import logging
+from datetime import date, timedelta
 
 from newsapi import NewsApiClient
 
 import dynaconfig
 
-# https://newsapi.org/
-
-API_KEY = dynaconfig.config["API_KEY"]
+API_KEY = dynaconfig.settings["API_KEY"]
 
 newsapi = NewsApiClient(api_key=API_KEY)
+
+YESTERDAY = date.today() - timedelta(days=1)
+QUERY = dynaconfig.settings["QUERY"]
 
 # Logging
 logging.basicConfig(
@@ -22,10 +24,12 @@ logging.basicConfig(
 )
 
 
-def fetch_info(query: str) -> dict:
+def fetch_info() -> dict:
     try:
-        result = newsapi.get_everything(q=query, sort_by="popularity")
-        logging.info(f"Searching for {query}")
+        result = newsapi.get_everything(
+            q=QUERY, sort_by="popularity", from_param=YESTERDAY
+        )
+        logging.info(f"Searching for {QUERY}")
         return result
     except ConnectionError as con_err:
         logging.error(con_err)
@@ -51,4 +55,7 @@ def list_info(fetch_info: dict):
 
 
 if __name__ == "__main__":
-    list_info(fetch_info("test"))
+    if dynaconfig.settings["LOAD_TO_DB"]:
+        pass
+    else:
+        list_info(fetch_info())

@@ -77,6 +77,9 @@ def load_to_db():
 
 if __name__ == "__main__":
     if dynaconfig.settings["LOAD_TO_DB"]:
-        load_to_db()
+        try:
+            load_to_db()
+        except BaseException as base_err:
+            logging.error(base_err)
     else:
         list_info(fetch_info())

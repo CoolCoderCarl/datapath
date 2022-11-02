@@ -62,19 +62,19 @@ jobs:
         include:
           - os: ubuntu-latest
             SERVICENAME: db
-            CMD_BUILD: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F ./app/truth_seeker.py
-            OUT_FILE_NAME: truth_seeker.exe
-            REQUIEREMENTS: application/vnd.microsoft.portable-executable
+#            CMD_BUILD: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F ./app/truth_seeker.py
+#            OUT_FILE_NAME: db
+#            REQUIEREMENTS: application/vnd.microsoft.portable-executable
           - os: ubuntu-latest
             SERVICENAME: truth_seeker
-            CMD_BUILD: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F ./app/truth_seeker.py
-            OUT_FILE_NAME: truth_seeker
-            REQUIEREMENTS: application/x-binary
+#            CMD_BUILD: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F ./app/truth_seeker.py
+#            OUT_FILE_NAME: truth_seeker
+#            REQUIEREMENTS: application/x-binary
           - os: ubuntu-latest
             SERVICENAME: datapath
-            CONTAINERFILE: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F ./app/truth_seeker.py
-            OUT_FILE_NAME: truth_seeker
-            REQUIEREMENTS: application/x-binary
+#            CONTAINERFILE: python -m PyInstaller --clean --workpath /tmp/build --specpath /tmp -F ./app/truth_seeker.py
+#            OUT_FILE_NAME: datapath
+#            REQUIEREMENTS: application/x-binary
 
     steps:
 

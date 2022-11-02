@@ -71,6 +71,7 @@ def load_to_db(fetch_info: dict):
 
 if __name__ == "__main__":
     while True:
+        # Pull too much info
         if CURRENT_TIME == TIME_TO_SEARCH:
             logging.info("Time to search has come !")
             try:

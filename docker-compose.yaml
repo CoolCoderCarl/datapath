@@ -1,14 +1,21 @@
 version: '3'
 
 services:
+  db:
+    container_name: db
+    image: h0d0user/db:latest
+    restart: always
+    network_mode: host
+    volumes:
+      - "shared-volume:/test.db"
+
   truth_seeker:
     container_name: truth_seeker
     image: h0d0user/truth_seeker:latest
     restart: always
     network_mode: host
-    environment:
-      - API_KEY=API_KEY
-      - QUERY=QUERY
+    depends_on:
+      - "db"
     volumes:
       - "shared-volume:/test.db"
 
@@ -17,17 +24,8 @@ services:
     image: h0d0user/datapath:latest
     restart: always
     network_mode: host
-    environment:
-      - API_TOKEN=API_TOKEN
-      - CHAT_ID=CHAT_ID
-    volumes:
-      - "shared-volume:/test.db"
-
-  db:
-    container_name: db
-    image: h0d0user/db:latest
-    restart: always
-    network_mode: host
+    depends_on:
+      - "db"
     volumes:
       - "shared-volume:/test.db"
 

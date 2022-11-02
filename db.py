@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import Path
 from sqlite3 import Error
 
-import datapath
+from app import datapath
 
 now = datetime.now()
 

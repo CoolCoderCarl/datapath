@@ -1,7 +1,7 @@
 FROM python:3.9-alpine as builder
 
 COPY ["db.py", "/opt/"]
-COPY requirements.txt requirements-db.txt
+COPY requirements-db.txt requirements-db.txt
 
 RUN pip3 install --no-cache-dir -r requirements-db.txt
 

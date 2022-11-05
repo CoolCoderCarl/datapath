@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  db:
+    container_name: db
+    image: h0d0user/db:latest
+    restart: always
+    network_mode: host
+    volumes:
+      - "shared-volume:/test.db"
+
+  truth_seeker:
+    container_name: truth_seeker
+    image: h0d0user/truth_seeker:latest
+    restart: always
+    network_mode: host
+    depends_on:
+      - "db"
+    volumes:
+      - "shared-volume:/test.db"
+
+  datapath:
+    container_name: datapath
+    image: h0d0user/datapath:latest
+    restart: always
+    network_mode: host
+    depends_on:
+      - "db"
+    volumes:
+      - "shared-volume:/test.db"
+
+volumes:
+  shared-volume:

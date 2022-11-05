@@ -1,6 +1,6 @@
 FROM python:3.9-alpine as builder
 
-COPY ["app/datapath.py", "/opt/"]
+COPY ["app/", "/opt/app/"]
 COPY ["dynaconfig.py", "/opt/"]
 COPY requirements-dp.txt requirements-dp.txt
 
@@ -8,4 +8,4 @@ RUN pip3 install --no-cache-dir -r requirements-dp.txt
 
 FROM builder
 
-CMD ["python3", "/opt/datapath.py"]
+CMD ["python3", "/opt/app/datapath.py"]

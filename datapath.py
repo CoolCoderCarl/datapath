@@ -20,8 +20,14 @@ CHAT_ID = dynaconfig.settings["CHAT_ID"]
 
 def send_news_to_telegram(message):
     try:
-        # response = requests.post(API_URL, json={"chat_id": CHAT_ID, "text": message})
-        requests.post(API_URL, json={"chat_id": CHAT_ID, "text": message})
-        # print(response.text)
+        response = requests.post(API_URL, json={"chat_id": CHAT_ID, "text": message})
+        if response.status_code == 200:
+            logging.info(
+                f"Sent: {response.reason}. Status code: {response.status_code}"
+            )
+        else:
+            logging.error(
+                f"Not sent: {response.reason}. Status code: {response.status_code}"
+            )
     except Exception as err:
         logging.error(err)

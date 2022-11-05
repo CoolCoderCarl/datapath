@@ -9,4 +9,4 @@ RUN pip3 install --no-cache-dir -r requirements-dp.txt
 
 FROM builder
 
-CMD ["python3", "/opt/app/datapath.py"]
+CMD ["python3.9", "/opt/app/datapath.py"]

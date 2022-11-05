@@ -6,9 +6,6 @@ from dynaconf import Dynaconf
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO
 )
-logging.basicConfig(
-    format="%(asctime)s - %(levelname)s - %(message)s", level=logging.ERROR
-)
 
 settings = Dynaconf(
     settings_files=[".secrets.toml"],

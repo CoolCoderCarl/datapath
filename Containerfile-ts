@@ -9,4 +9,4 @@ RUN pip3 install --no-cache-dir -r requirements-ts.txt
 
 FROM builder
 
-CMD ["python3", "/opt/app/truth_seeker.py"]
+CMD ["python3.9", "/opt/app/truth_seeker.py"]

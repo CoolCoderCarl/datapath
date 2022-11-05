@@ -20,7 +20,8 @@ CHAT_ID = dynaconfig.settings["CHAT_ID"]
 
 def send_news_to_telegram(message):
     try:
-        response = requests.post(API_URL, json={"chat_id": CHAT_ID, "text": message})
-        print(response.text)
+        # response = requests.post(API_URL, json={"chat_id": CHAT_ID, "text": message})
+        requests.post(API_URL, json={"chat_id": CHAT_ID, "text": message})
+        # print(response.text)
     except Exception as err:
         logging.error(err)

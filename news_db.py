@@ -51,14 +51,13 @@ logging.basicConfig(
 
 
 def create_connection(db_file: Path):
-    conn = None
     try:
         conn = sqlite3.connect(db_file)
         logging.info("Connection created successfully !")
         return conn
     except Error as create_conn_err:
         logging.error(create_conn_err)
-    return conn
+    return None
 
 
 def create_table(conn, create_table_query):

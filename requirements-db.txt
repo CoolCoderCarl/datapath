@@ -1,0 +1,2 @@
+dynaconfig~=0.4
+dynaconf~=3.1.11

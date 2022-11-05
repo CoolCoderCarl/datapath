@@ -13,7 +13,7 @@ CURRENT_TIME = now.strftime("%H:%M")
 TIME_TO_PURGE = "00:00"
 
 
-DB_FILE = Path("test.db")
+DB_FILE = Path("/mnt/test.db")
 
 CREATE_TABLE_SQL = """
 CREATE TABLE IF NOT EXISTS news (

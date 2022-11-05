@@ -3,7 +3,7 @@ from datetime import date, datetime, timedelta
 
 from newsapi import NewsApiClient
 
-import db
+import news_db
 import dynaconfig
 
 API_KEY = dynaconfig.settings["API_KEY"]
@@ -60,8 +60,8 @@ def load_to_db(fetch_info: dict):
                     pass
                 else:
                     article_list.append(article_data)
-            db.insert_into(
-                db.create_connection(db.DB_FILE),
+            news_db.insert_into(
+                news_db.create_connection(news_db.DB_FILE),
                 tuple(article_list),
             )
     else:

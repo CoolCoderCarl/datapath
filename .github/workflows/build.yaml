@@ -68,7 +68,7 @@ jobs:
             CONTAINERFILE: Containerfile-ts
           - os: ubuntu-latest
             SERVICENAME: datapath
-            CONTAINERFILE: Containerfile-dt
+            CONTAINERFILE: Containerfile-dp
 
     steps:
 

@@ -1,8 +1,16 @@
 import logging
+import time
+from datetime import datetime
 
 import requests
 
 import dynaconfig
+import news_db
+
+current_time = datetime.now().strftime("%H:%M")
+# Time range for sending messages
+TIME_TO_SEND_START = datetime.now().replace(hour=10, minute=00).strftime("%H:%M")
+TIME_TO_SEND_END = datetime.now().replace(hour=20, minute=00).strftime("%H:%M")
 
 # Logging
 logging.basicConfig(
@@ -31,3 +39,13 @@ def send_news_to_telegram(message):
             )
     except Exception as err:
         logging.error(err)
+
+
+if __name__ == "__main__":
+    while True:
+        if TIME_TO_SEND_START < current_time < TIME_TO_SEND_END:
+            for news in news_db.send_all_news(
+                news_db.create_connection(news_db.DB_FILE)
+            ):
+                time.sleep(300)
+                send_news_to_telegram(news)

@@ -1,11 +1,8 @@
 import logging
 import sqlite3
-import time
 from datetime import datetime
 from pathlib import Path
 from sqlite3 import Error
-
-import datapath
 
 now = datetime.now()
 
@@ -102,9 +99,7 @@ def send_all_news(conn):
 
     rows = cur.fetchall()
 
-    for row in rows:
-        time.sleep(3)
-        datapath.send_news_to_telegram(row)
+    return rows
 
 
 def delete_all_news(conn):

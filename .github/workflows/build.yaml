@@ -126,7 +126,7 @@ jobs:
 
             Branch: ${{ github.ref }}
 
-            <b>Pushed image:</b> <code>docker pull h0d0user/db:${{ needs.prepare.outputs.get_current_tag }}</code>,
+            <b>Pushed image:</b> <code>docker pull h0d0user/news_db:${{ needs.prepare.outputs.get_current_tag }}</code>,
             <code>docker pull h0d0user/truth_seeker:${{ needs.prepare.outputs.get_current_tag }}</code>,
             <code>docker pull h0d0user/datapath:${{ needs.prepare.outputs.get_current_tag }}</code>
             See changes: https://github.com/${{ github.repository }}/commit/${{ github.sha }}

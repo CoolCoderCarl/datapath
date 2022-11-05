@@ -61,7 +61,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            SERVICENAME: db
+            SERVICENAME: news_db
             CONTAINERFILE: Containerfile-db
           - os: ubuntu-latest
             SERVICENAME: truth_seeker

@@ -3,7 +3,7 @@ version: '3'
 services:
   news_db:
     container_name: news_db
-    image: h0d0user/db:v0.0.31
+    image: h0d0user/news_db:v0.0.35
     restart: always
     network_mode: host
     volumes:
@@ -12,7 +12,7 @@ services:
 
   truth_seeker:
     container_name: truth_seeker
-    image: h0d0user/truth_seeker:v0.0.31
+    image: h0d0user/truth_seeker:v0.0.35
     restart: always
     network_mode: host
     depends_on:
@@ -23,7 +23,7 @@ services:
 
   datapath:
     container_name: datapath
-    image: h0d0user/datapath:v0.0.31
+    image: h0d0user/datapath:v0.0.35
     restart: always
     network_mode: host
     depends_on:

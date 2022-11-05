@@ -1,4 +1,4 @@
-from app import truth_seeker
+import truth_seeker
 
 
 def test_fetch_info():

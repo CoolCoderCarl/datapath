@@ -3,8 +3,8 @@ from datetime import date, datetime, timedelta
 
 from newsapi import NewsApiClient
 
-import news_db
 import dynaconfig
+import news_db
 
 API_KEY = dynaconfig.settings["API_KEY"]
 QUERY = dynaconfig.settings["QUERY"]

@@ -26,6 +26,11 @@ CHAT_ID = dynaconfig.settings["CHAT_ID"]
 
 
 def send_news_to_telegram(message):
+    """
+    Send messages from db to telegram
+    :param message:
+    :return:
+    """
     try:
         response = requests.post(API_URL, json={"chat_id": CHAT_ID, "text": message})
         if response.status_code == 200:

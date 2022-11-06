@@ -5,11 +5,13 @@ from datetime import datetime
 from pathlib import Path
 from sqlite3 import Error
 
+import dynaconfig
+
 TIME_TO_PURGE = "00:00"
 
+DB_FILE = Path(f"/mnt/{dynaconfig.settings['DB_NAME']}")
 
-DB_FILE = Path("/mnt/test.db")
-
+# SQL queries
 CREATE_TABLE_SQL = """
 CREATE TABLE IF NOT EXISTS news (
 author TEXT,
@@ -46,6 +48,11 @@ logging.basicConfig(
 
 
 def create_connection(db_file: Path):
+    """
+    Create db file
+    :param db_file: path to db file to create
+    :return:
+    """
     try:
         conn = sqlite3.connect(db_file)
         logging.info("Connection created successfully !")
@@ -72,6 +79,7 @@ def create_table(conn, create_table_query):
 def insert_into(conn, data: tuple):
     """
     Insert data to base
+    This is the load step in ETL pipeline
     :param conn: Connection to the SQLite database
     :param data:
     :return:

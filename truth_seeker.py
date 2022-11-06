@@ -7,11 +7,9 @@ from newsapi import NewsApiClient
 import dynaconfig
 import news_db
 
+# Load variables from settings.toml
 API_KEY = dynaconfig.settings["API_KEY"]
 QUERY = dynaconfig.settings["QUERY"]
-
-# Use to get news from yesterday to current time
-YESTERDAY = date.today() - timedelta(days=1)
 
 newsapi = NewsApiClient(api_key=API_KEY)
 
@@ -31,9 +29,16 @@ logging.basicConfig(
 
 
 def fetch_info() -> dict:
+    """
+    Fetch info from API according to query in settings.toml
+    This is the extraction step in ETL pipeline
+    :return:
+    """
+    # Use to get news from yesterday to current time
+    yesterday = date.today() - timedelta(days=1)
     try:
         result = newsapi.get_everything(
-            q=QUERY, sort_by="popularity", from_param=YESTERDAY
+            q=QUERY, sort_by="popularity", from_param=yesterday
         )
         logging.info(f"Searching for {QUERY}")
         return result
@@ -46,6 +51,12 @@ def fetch_info() -> dict:
 
 
 def load_to_db(fetch_info: dict):
+    """
+    Load specific info to db
+    These are the transform and load steps in ETL pipeline
+    :param fetch_info:
+    :return:
+    """
     if fetch_info:
         for article in fetch_info.get("articles"):
             article_list = []

@@ -8,7 +8,7 @@ logging.basicConfig(
 )
 
 settings = Dynaconf(
-    settings_files=[".secrets.toml"],
+    settings_files=["settings.toml"],
 )
 
 if __name__ == "__main__":

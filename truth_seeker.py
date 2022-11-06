@@ -15,7 +15,7 @@ YESTERDAY = date.today() - timedelta(days=1)
 
 newsapi = NewsApiClient(api_key=API_KEY)
 
-TIME_TO_SEARCH = "14:10"
+TIME_TO_SEARCH = "11:10"
 
 
 # Logging
@@ -69,8 +69,8 @@ def load_to_db(fetch_info: dict):
 
 if __name__ == "__main__":
     while True:
-        time.sleep(1)
         CURRENT_TIME = datetime.now().strftime("%H:%M")
+        time.sleep(1)
         # Pull too much info
         if CURRENT_TIME == TIME_TO_SEARCH:
             logging.info(f"Time: {CURRENT_TIME}. Time to search has come !")

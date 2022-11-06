@@ -118,8 +118,8 @@ if __name__ == "__main__":
         create_table(conn, CREATE_TABLE_SQL)
 
     while True:
-        time.sleep(1)
         CURRENT_TIME = datetime.now().strftime("%H:%M")
+        time.sleep(1)
         if conn is not None:
             send_all_news(conn)
             if CURRENT_TIME == TIME_TO_PURGE:

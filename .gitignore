@@ -129,4 +129,7 @@ dmypy.json
 .pyre/
 
 # Secret file
-.secrets.toml
+settings.toml
+
+# Database files
+*.db

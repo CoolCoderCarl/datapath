@@ -1,4 +1,5 @@
 import logging
+import time
 from datetime import date, datetime, timedelta
 
 from newsapi import NewsApiClient
@@ -14,10 +15,7 @@ YESTERDAY = date.today() - timedelta(days=1)
 
 newsapi = NewsApiClient(api_key=API_KEY)
 
-now = datetime.now()
-
-CURRENT_TIME = now.strftime("%H:%M")
-TIME_TO_SEARCH = "01:00"
+TIME_TO_SEARCH = "14:10"
 
 
 # Logging
@@ -71,10 +69,14 @@ def load_to_db(fetch_info: dict):
 
 if __name__ == "__main__":
     while True:
+        time.sleep(1)
+        CURRENT_TIME = datetime.now().strftime("%H:%M")
         # Pull too much info
         if CURRENT_TIME == TIME_TO_SEARCH:
-            logging.info("Time to search has come !")
+            logging.info(f"Time: {CURRENT_TIME}. Time to search has come !")
             try:
                 load_to_db(fetch_info())
             except BaseException as base_err:
                 logging.error(base_err)
+        else:
+            logging.info(f"Time: {CURRENT_TIME}. Still waiting for searching.")

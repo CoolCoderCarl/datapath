@@ -1,12 +1,10 @@
 import logging
 import sqlite3
+import time
 from datetime import datetime
 from pathlib import Path
 from sqlite3 import Error
 
-now = datetime.now()
-
-CURRENT_TIME = now.strftime("%H:%M")
 TIME_TO_PURGE = "00:00"
 
 
@@ -120,10 +118,14 @@ if __name__ == "__main__":
         create_table(conn, CREATE_TABLE_SQL)
 
     while True:
+        time.sleep(1)
+        CURRENT_TIME = datetime.now().strftime("%H:%M")
         if conn is not None:
             send_all_news(conn)
             if CURRENT_TIME == TIME_TO_PURGE:
-                logging.info("Time to purge has come !")
+                logging.info(f"Time: {CURRENT_TIME}. Time to purge has come !")
                 delete_all_news(conn)
+            else:
+                logging.info(f"Time: {CURRENT_TIME}. Still waiting for purging.")
         else:
             logging.error("Error! Cannot create the database connection.")

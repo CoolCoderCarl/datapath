@@ -8,7 +8,7 @@ services:
     network_mode: host
     volumes:
       - "shared-volume:/mnt/"
-      - "settings.toml:/opt/settings.toml"
+      - "./settings.toml:/opt/settings.toml"
 
   truth_seeker:
     container_name: truth_seeker
@@ -19,7 +19,7 @@ services:
       - "news_db"
     volumes:
       - "shared-volume:/mnt/"
-      - "settings.toml:/opt/settings.toml"
+      - "./settings.toml:/opt/settings.toml"
 
   datapath:
     container_name: datapath
@@ -30,7 +30,7 @@ services:
       - "news_db"
     volumes:
       - "shared-volume:/mnt/"
-      - "settings.toml:/opt/settings.toml"
+      - "./settings.toml:/opt/settings.toml"
 
 volumes:
   shared-volume:

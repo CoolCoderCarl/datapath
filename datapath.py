@@ -16,6 +16,9 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO
 )
 logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s", level=logging.WARNING
+)
+logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s", level=logging.ERROR
 )
 
@@ -48,12 +51,15 @@ def send_news_to_telegram(message):
 if __name__ == "__main__":
     data_from_db = news_db.create_connection(news_db.DB_FILE)
     while True:
-        time.sleep(1)
-        current_time = datetime.now().strftime("%H:%M")
-        if TIME_TO_SEND_START < current_time < TIME_TO_SEND_END:
-            logging.info(f"Time: {current_time}. Time to send has come !")
-            for news in news_db.send_all_news(data_from_db):
-                send_news_to_telegram(news)
-                time.sleep(300)
+        if data_from_db:
+            time.sleep(1)
+            current_time = datetime.now().strftime("%H:%M")
+            if TIME_TO_SEND_START < current_time < TIME_TO_SEND_END:
+                logging.info(f"Time: {current_time}. Time to send has come !")
+                for news in news_db.send_all_news(data_from_db):
+                    send_news_to_telegram(news)
+                    time.sleep(300)
+            else:
+                logging.info(f"Time: {current_time}. Still waiting to send.")
         else:
-            logging.info(f"Time: {current_time}. Still waiting to send.")
+            logging.warning("Looks like database is empty.")

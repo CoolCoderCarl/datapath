@@ -9,7 +9,7 @@ import dynaconfig
 
 TIME_TO_PURGE = "00:00"
 
-DB_FILE = Path(f"/mnt/{dynaconfig.settings['DB_NAME']}")
+DB_FILE = Path(f"{dynaconfig.settings['DB_NAME']}")
 
 # SQL queries
 CREATE_TABLE_SQL = """

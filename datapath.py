@@ -7,22 +7,25 @@ import requests
 import dynaconfig
 import news_db
 
-# Time range for sending messages
-TIME_TO_SEND_START = datetime.now().replace(hour=10, minute=00).strftime("%H:%M")
-TIME_TO_SEND_END = datetime.now().replace(hour=20, minute=00).strftime("%H:%M")
+# Time range for sending messages loaded from settings.toml
+TIME_TO_SEND_START = dynaconfig.settings["TIMINIGS"]["TIME_TO_SEND_START"]
+TIME_TO_SEND_END = dynaconfig.settings["TIMINIGS"]["TIME_TO_SEND_END"]
 
 # Logging
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s", level=logging.INFO
 )
 logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s", level=logging.WARNING
+)
+logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s", level=logging.ERROR
 )
 
 
-API_TOKEN = dynaconfig.settings["API_TOKEN"]
+API_TOKEN = dynaconfig.settings["TELEGRAM"]["API_TOKEN"]
 API_URL = f"https://api.telegram.org/bot{API_TOKEN}/sendMessage"
-CHAT_ID = dynaconfig.settings["CHAT_ID"]
+CHAT_ID = dynaconfig.settings["TELEGRAM"]["CHAT_ID"]
 
 
 def send_news_to_telegram(message):
@@ -32,7 +35,21 @@ def send_news_to_telegram(message):
     :return:
     """
     try:
-        response = requests.post(API_URL, json={"chat_id": CHAT_ID, "text": message})
+        response = requests.post(
+            API_URL,
+            json={
+                "chat_id": CHAT_ID,
+                "text": f"Author: {message[0]}\n"
+                f"\n"
+                f"Title: {message[1]}\n"
+                f"\n"
+                f"{message[2]}\n"
+                f"\n"
+                f"URL: {message[3]}\n"
+                f"\n"
+                f"Date published: {message[4]}\n",
+            },
+        )
         if response.status_code == 200:
             logging.info(
                 f"Sent: {response.reason}. Status code: {response.status_code}"
@@ -46,14 +63,21 @@ def send_news_to_telegram(message):
 
 
 if __name__ == "__main__":
-    data_from_db = news_db.create_connection(news_db.DB_FILE)
+    db_connection = news_db.create_connection(news_db.DB_FILE)
     while True:
-        time.sleep(1)
-        current_time = datetime.now().strftime("%H:%M")
-        if TIME_TO_SEND_START < current_time < TIME_TO_SEND_END:
-            logging.info(f"Time: {current_time}. Time to send has come !")
-            for news in news_db.send_all_news(data_from_db):
-                send_news_to_telegram(news)
-                time.sleep(300)
+        if db_connection:
+            time.sleep(1)
+            current_time = datetime.now().strftime("%H:%M")
+            if TIME_TO_SEND_START < current_time < TIME_TO_SEND_END:
+                logging.info("Time to send has come !")
+                data_from_db = news_db.send_all_news(db_connection)
+                if len(data_from_db) == 0:
+                    logging.warning("Database is empty !")
+                else:
+                    for news in data_from_db:
+                        send_news_to_telegram(news)
+                        time.sleep(3)
+            else:
+                logging.info("Still waiting to send.")
         else:
-            logging.info(f"Time: {current_time}. Still waiting to send.")
+            logging.error("Connection to db is not exist !")

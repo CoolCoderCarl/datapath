@@ -7,13 +7,13 @@ from newsapi import NewsApiClient
 import dynaconfig
 import news_db
 
-# Load variables from settings.toml
-API_KEY = dynaconfig.settings["API_KEY"]
-QUERY = dynaconfig.settings["QUERY"]
+# News API params loaded from settings.toml
+API_KEY = dynaconfig.settings["NEWS_API"]["API_KEY"]
+QUERY = dynaconfig.settings["NEWS_API"]["QUERY"]
+LANGUAGE = dynaconfig.settings["NEWS_API"]["LANGUAGE"]
+TIME_TO_SEARCH = dynaconfig.settings["TIMINIGS"]["TIME_TO_SEARCH"]
 
 newsapi = NewsApiClient(api_key=API_KEY)
-
-TIME_TO_SEARCH = "11:10"
 
 
 # Logging
@@ -37,10 +37,12 @@ def fetch_info() -> dict:
     # Use to get news from yesterday to current time
     yesterday = date.today() - timedelta(days=1)
     try:
-        result = newsapi.get_everything(
-            q=QUERY, sort_by="popularity", from_param=yesterday
+        logging.info(
+            f"Searching for {QUERY}; most popular; from: {yesterday}; language: {LANGUAGE}"
         )
-        logging.info(f"Searching for {QUERY}")
+        result = newsapi.get_everything(
+            q=QUERY, sort_by="popularity", from_param=yesterday, language=LANGUAGE
+        )
         return result
     except ConnectionError as con_err:
         logging.error(con_err)
@@ -74,7 +76,7 @@ def load_to_db(fetch_info: dict):
                 tuple(article_list),
             )
     else:
-        logging.warning("Empty response from API.")
+        logging.warning("Empty response from News API.")
         raise IndexError
 
 
@@ -84,10 +86,10 @@ if __name__ == "__main__":
         time.sleep(1)
         # Pull too much info
         if CURRENT_TIME == TIME_TO_SEARCH:
-            logging.info(f"Time: {CURRENT_TIME}. Time to search has come !")
+            logging.info("Time to search has come !")
             try:
                 load_to_db(fetch_info())
             except BaseException as base_err:
                 logging.error(base_err)
         else:
-            logging.info(f"Time: {CURRENT_TIME}. Still waiting for searching.")
+            logging.info("Still waiting for searching.")

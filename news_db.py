@@ -7,9 +7,9 @@ from sqlite3 import Error
 
 import dynaconfig
 
-TIME_TO_PURGE = "00:00"
-
-DB_FILE = Path(f"/mnt/{dynaconfig.settings['DB_NAME']}")
+# Timing and db name loaded from settings.toml
+TIME_TO_PURGE = dynaconfig.settings["TIMINIGS"]["TIME_TO_PURGE"]
+DB_FILE = Path(f"{dynaconfig.settings['DB']['DB_NAME']}")
 
 # SQL queries
 CREATE_TABLE_SQL = """
@@ -121,19 +121,20 @@ def delete_all_news(conn):
 
 
 if __name__ == "__main__":
-    conn = create_connection(DB_FILE)
-    if DB_FILE.exists():
-        create_table(conn, CREATE_TABLE_SQL)
+    try:
+        conn = create_connection(DB_FILE)
+        if DB_FILE.exists():
+            create_table(conn, CREATE_TABLE_SQL)
 
-    while True:
-        CURRENT_TIME = datetime.now().strftime("%H:%M")
-        time.sleep(1)
-        if conn is not None:
-            send_all_news(conn)
-            if CURRENT_TIME == TIME_TO_PURGE:
-                logging.info(f"Time: {CURRENT_TIME}. Time to purge has come !")
-                delete_all_news(conn)
-            else:
-                logging.info(f"Time: {CURRENT_TIME}. Still waiting for purging.")
-        else:
-            logging.error("Error! Cannot create the database connection.")
+        while True:
+            CURRENT_TIME = datetime.now().strftime("%H:%M")
+            time.sleep(1)
+            if conn is not None:
+                send_all_news(conn)
+                if CURRENT_TIME == TIME_TO_PURGE:
+                    logging.info("Time to purge has come !")
+                    delete_all_news(conn)
+                else:
+                    logging.info("Still waiting for purging.")
+    except sqlite3.Error as sql_err:
+        logging.error(f"Cannot create the database connection. Error: {sql_err}")

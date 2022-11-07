@@ -4,33 +4,36 @@ services:
   news_db:
     container_name: news_db
     image: h0d0user/news_db:latest
+    pull_policy: always
     restart: always
     network_mode: host
     volumes:
       - "shared-volume:/mnt/"
-      - "settings.toml:/opt/settings.toml"
+      - "./settings.toml:/opt/settings.toml"
 
   truth_seeker:
     container_name: truth_seeker
     image: h0d0user/truth_seeker:latest
+    pull_policy: always
     restart: always
     network_mode: host
     depends_on:
       - "news_db"
     volumes:
       - "shared-volume:/mnt/"
-      - "settings.toml:/opt/settings.toml"
+      - "./settings.toml:/opt/settings.toml"
 
   datapath:
     container_name: datapath
     image: h0d0user/datapath:latest
+    pull_policy: always
     restart: always
     network_mode: host
     depends_on:
       - "news_db"
     volumes:
       - "shared-volume:/mnt/"
-      - "settings.toml:/opt/settings.toml"
+      - "./settings.toml:/opt/settings.toml"
 
 volumes:
   shared-volume:

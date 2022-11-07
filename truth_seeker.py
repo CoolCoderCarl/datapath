@@ -11,7 +11,7 @@ import news_db
 API_KEY = dynaconfig.settings["NEWS_API"]["API_KEY"]
 QUERY = dynaconfig.settings["NEWS_API"]["QUERY"]
 LANGUAGE = dynaconfig.settings["NEWS_API"]["LANGUAGE"]
-TIME_TO_SEARCH = dynaconfig.settings["TIMINGS"]["TIME_TO_SEARCH"]
+TIME_TO_SEARCH = dynaconfig.settings["TIMINIGS"]["TIME_TO_SEARCH"]
 
 newsapi = NewsApiClient(api_key=API_KEY)
 

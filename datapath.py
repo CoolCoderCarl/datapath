@@ -35,7 +35,21 @@ def send_news_to_telegram(message):
     :return:
     """
     try:
-        response = requests.post(API_URL, json={"chat_id": CHAT_ID, "text": message})
+        response = requests.post(
+            API_URL,
+            json={
+                "chat_id": CHAT_ID,
+                "text": f"Author: {message[0]}\n"
+                f"\n"
+                f"Title: {message[1]}\n"
+                f"\n"
+                f"{message[2]}\n"
+                f"\n"
+                f"URL: {message[3]}\n"
+                f"\n"
+                f"Date published: {message[4]}\n",
+            },
+        )
         if response.status_code == 200:
             logging.info(
                 f"Sent: {response.reason}. Status code: {response.status_code}"
@@ -62,7 +76,7 @@ if __name__ == "__main__":
                 else:
                     for news in data_from_db:
                         send_news_to_telegram(news)
-                        time.sleep(300)
+                        time.sleep(3)
             else:
                 logging.info("Still waiting to send.")
         else:

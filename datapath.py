@@ -10,6 +10,7 @@ import news_db
 # Time range for sending messages loaded from settings.toml
 TIME_TO_SEND_START = dynaconfig.settings["TIMINIGS"]["TIME_TO_SEND_START"]
 TIME_TO_SEND_END = dynaconfig.settings["TIMINIGS"]["TIME_TO_SEND_END"]
+SENDING_INTERVAL = dynaconfig.settings["TIMINIGS"]["SENDING_INTERVAL"]
 
 # Logging
 logging.basicConfig(
@@ -76,7 +77,7 @@ if __name__ == "__main__":
                 else:
                     for news in data_from_db:
                         send_news_to_telegram(news)
-                        time.sleep(3)
+                        time.sleep(SENDING_INTERVAL)
             else:
                 logging.info("Still waiting to send.")
         else:

@@ -25,16 +25,20 @@ pub_date TEXT
 INSERT_INTO_SQL = """
 INSERT INTO news
 (author,title,description,url,pub_date)
-VALUES(?,?,?,?,?)
+VALUES(?,?,?,?,?);
 """
 
 
 SELECT_FROM_SQL = """
-SELECT * FROM news
+SELECT * FROM news;
 """
 
 DELETE_FROM_SQL = """
-DELETE FROM news
+DELETE FROM news;
+"""
+
+SELECT_COUNT_SQL = """
+SELECT COUNT(*) FROM news;
 """
 
 
@@ -45,6 +49,10 @@ logging.basicConfig(
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s", level=logging.ERROR
 )
+
+
+def check_entities_count(conn):
+    return conn.cursor().execute(SELECT_COUNT_SQL).fetchone()[0]
 
 
 def create_connection(db_file: Path):
@@ -71,7 +79,7 @@ def create_table(conn, create_table_query):
     try:
         c = conn.cursor()
         c.execute(create_table_query)
-        logging.info("Table created successfully !")
+        logging.info(f"Table created successfully !")
     except Error as create_table_err:
         logging.error(create_table_err)
 
@@ -88,7 +96,9 @@ def insert_into(conn, data: tuple):
         cur = conn.cursor()
         cur.execute(INSERT_INTO_SQL, data)
         conn.commit()
-        logging.info("Data inserted successfully !")
+        logging.info(
+            f"Data inserted successfully ! Entities in db for now: {check_entities_count(conn)}"
+        )
         return cur.lastrowid
     except Error as insert_err:
         logging.error(insert_err)
@@ -100,12 +110,7 @@ def send_all_news(conn):
     :param conn: Connection to the SQLite database
     :return:
     """
-    cur = conn.cursor()
-    cur.execute(SELECT_FROM_SQL)
-
-    rows = cur.fetchall()
-
-    return rows
+    return conn.cursor().execute(SELECT_FROM_SQL).fetchall()
 
 
 def delete_all_news(conn):
@@ -114,10 +119,11 @@ def delete_all_news(conn):
     :param conn: Connection to the SQLite database
     :return:
     """
-    cur = conn.cursor()
-    cur.execute(DELETE_FROM_SQL)
+    conn.cursor().execute(DELETE_FROM_SQL)
     conn.commit()
-    logging.info("Database was purged !")
+    logging.info(
+        f"Database was purged ! Entities in db for now: {check_entities_count(conn)}"
+    )
 
 
 if __name__ == "__main__":
@@ -132,9 +138,13 @@ if __name__ == "__main__":
             if conn is not None:
                 send_all_news(conn)
                 if CURRENT_TIME == TIME_TO_PURGE:
-                    logging.info("Time to purge has come !")
+                    logging.info(
+                        f"Time to purge has come ! Entities in db for now: {check_entities_count(conn)}"
+                    )
                     delete_all_news(conn)
                 else:
-                    logging.info("Still waiting for purging.")
+                    logging.info(
+                        f"Still waiting for purging. Entities in db for now: {check_entities_count(conn)}"
+                    )
     except sqlite3.Error as sql_err:
         logging.error(f"Cannot create the database connection. Error: {sql_err}")

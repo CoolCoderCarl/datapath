@@ -70,7 +70,7 @@ if __name__ == "__main__":
             time.sleep(1)
             current_time = datetime.now().strftime("%H:%M")
             if TIME_TO_SEND_START < current_time < TIME_TO_SEND_END:
-                logging.info("Time to send has come !")
+                logging.info("Time to send news has come !")
                 data_from_db = news_db.send_all_news(db_connection)
                 if len(data_from_db) == 0:
                     logging.warning("Database is empty !")
@@ -78,6 +78,8 @@ if __name__ == "__main__":
                     for news in data_from_db:
                         send_news_to_telegram(news)
                         time.sleep(SENDING_INTERVAL)
+                    else:
+                        logging.warning("All news was sent !")
             else:
                 logging.info("Still waiting to send.")
         else:

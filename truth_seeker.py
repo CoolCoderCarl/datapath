@@ -73,7 +73,8 @@ def load_to_db(fetch_info: dict):
                     article_list.append(article_data)
             news_db.insert_into(
                 news_db.create_connection(news_db.DB_FILE),
-                tuple(article_list),
+                # Pull too much info but add set conversion
+                tuple(set(article_list)),
             )
     else:
         logging.warning("Empty response from News API.")
@@ -84,7 +85,6 @@ if __name__ == "__main__":
     while True:
         CURRENT_TIME = datetime.now().strftime("%H:%M")
         time.sleep(1)
-        # Pull too much info
         if CURRENT_TIME == TIME_TO_SEARCH:
             logging.info("Time to search has come !")
             try:

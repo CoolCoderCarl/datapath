@@ -6,6 +6,7 @@
 
 # Docker
 docker-compose.yml
+docker-compose.yaml
 **/Dockerfile
 **/Containerfile*
 .docker
@@ -14,4 +15,9 @@ docker-compose.yml
 # Meta
 README.md
 LICENSE
+
+# Configuration
 requirements.txt
+changelog.json
+settings.toml
+*.db

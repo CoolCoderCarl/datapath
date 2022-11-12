@@ -1,3 +1,4 @@
 requests~=2.28.1
 dynaconf~=3.1.11
 dynaconfig~=0.4
+newsapi-python~=0.2.6

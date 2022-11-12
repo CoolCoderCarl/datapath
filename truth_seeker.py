@@ -2,6 +2,7 @@ import logging
 import time
 from datetime import date, datetime, timedelta
 
+import pandas as pd
 from newsapi import NewsApiClient
 
 import dynaconfig
@@ -60,21 +61,15 @@ def load_to_db(fetch_info: dict):
     :return:
     """
     if fetch_info:
-        for article in fetch_info.get("articles"):
-            article_list = []
-            for article_key, article_data in article.items():
-                if article_key == "source":
-                    pass
-                elif article_key == "content":
-                    pass
-                elif article_key == "urlToImage":
-                    pass
-                else:
-                    article_list.append(article_data)
+        articles_df = pd.unique(pd.DataFrame(fetch_info["articles"]))
+        del articles_df["source"]
+        del articles_df["content"]
+        del articles_df["urlToImage"]
+        for article in articles_df.values:
             news_db.insert_into(
                 news_db.create_connection(news_db.DB_FILE),
                 # Pull too much info but add set conversion
-                tuple(set(article_list)),
+                tuple(article),
             )
     else:
         logging.warning("Empty response from News API.")

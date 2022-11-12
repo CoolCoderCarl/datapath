@@ -6,8 +6,8 @@ COPY ["news_db.py", "/opt/"]
 COPY ["dynaconfig.py", "/opt/"]
 COPY requirements-ts.txt requirements-ts.txt
 
-RUN apt-get -y install libc-dev build-essential
-RUN pip install -U pip
+RUN apk add install libc-dev build-base
+RUN pip3 install -U pip
 
 RUN pip3 install --no-cache-dir -r requirements-ts.txt
 

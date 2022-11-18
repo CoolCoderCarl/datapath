@@ -61,14 +61,16 @@ def load_to_db(fetch_info: dict):
     :return:
     """
     if fetch_info:
-        articles_df = pd.unique(pd.DataFrame(fetch_info["articles"]))
+        logging.info(f"Found about {fetch_info['totalResults']} entities.")
+        # articles_df = pd.unique(pd.DataFrame(fetch_info["articles"]))
+        articles_df = pd.DataFrame(fetch_info["articles"])
         del articles_df["source"]
         del articles_df["content"]
         del articles_df["urlToImage"]
         for article in articles_df.values:
             news_db.insert_into(
                 news_db.create_connection(news_db.DB_FILE),
-                # Pull too much info but add set conversion
+                # Pull too much info
                 tuple(article),
             )
     else:
@@ -84,7 +86,11 @@ if __name__ == "__main__":
             logging.info("Time to search has come !")
             try:
                 load_to_db(fetch_info())
+            except ValueError as val_err:
+                logging.error(f"ValueError: {val_err}")
+            except IndexError as ind_err:
+                logging.error(f"IndexError: {ind_err}")
             except BaseException as base_err:
-                logging.error(base_err)
+                logging.error(f"BaseException: {base_err}")
         else:
             logging.info("Still waiting for searching.")

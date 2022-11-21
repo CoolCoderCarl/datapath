@@ -1,4 +1,5 @@
-FROM python:3.9-alpine as builder
+# FROM python:3.9-alpine as builder
+FROM h0d0user/emperor_pandas:latest as builder
 
 COPY ["datapath.py", "/opt/"]
 COPY ["dynaconfig.py", "/opt/"]

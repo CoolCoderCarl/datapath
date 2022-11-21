@@ -1,13 +1,11 @@
 FROM python:3.9-alpine as builder
 
-COPY ["truth_seeker.py", "/opt/"]
 COPY ["datapath.py", "/opt/"]
-COPY ["news_db.py", "/opt/"]
 COPY ["dynaconfig.py", "/opt/"]
-COPY requirements-dp.txt requirements-dp.txt
+COPY requirements.txt requirements.txt
 
 RUN pip3 install -U pip
-RUN pip3 install --no-cache-dir -r requirements-dp.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 FROM builder
 

@@ -6,10 +6,10 @@ WORKDIR /opt/
 COPY ["datapath.py", "/opt/"]
 COPY ["dynaconfig.py", "/opt/"]
 
-COPY ./requirements.txt /opt/requirements.txt
+COPY requirements.txt requirements.txt
 
 RUN pip3 install -U pip
-RUN pip3 install --no-cache-dir -r /opt/requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 FROM builder
 

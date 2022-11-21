@@ -54,21 +54,9 @@ jobs:
             See changes: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
 
   build:
-    name: Build packages
-    runs-on: ${{ matrix.os }}
+    name: Build docker image
+    runs-on: ubuntu-latest
     needs: prepare
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-latest
-            SERVICENAME: news_db
-            CONTAINERFILE: Containerfile-db
-          - os: ubuntu-latest
-            SERVICENAME: truth_seeker
-            CONTAINERFILE: Containerfile-ts
-          - os: ubuntu-latest
-            SERVICENAME: datapath
-            CONTAINERFILE: Containerfile-dp
 
     steps:
 
@@ -87,8 +75,8 @@ jobs:
         with:
           context: .
           push: true
-          file: ${{ matrix.CONTAINERFILE }}
-          tags: h0d0user/${{ matrix.SERVICENAME }}:${{ needs.prepare.outputs.get_current_tag }}
+          file: Containerfile
+          tags: h0d0user/datapath:${{ needs.prepare.outputs.get_current_tag }}
 
       - name: Notify if failure
         if: ${{ failure() }}
@@ -126,8 +114,6 @@ jobs:
 
             Branch: ${{ github.ref }}
 
-            <b>Pushed image:</b> <code>docker pull h0d0user/news_db:${{ needs.prepare.outputs.get_current_tag }}</code>,
-            <code>docker pull h0d0user/truth_seeker:${{ needs.prepare.outputs.get_current_tag }}</code>,
-            <code>docker pull h0d0user/datapath:${{ needs.prepare.outputs.get_current_tag }}</code>
+            <b>Pushed image:</b> <code>docker pull h0d0user/datapath:${{ needs.prepare.outputs.get_current_tag }}</code>
 
             See changes: https://github.com/${{ github.repository }}/commit/${{ github.sha }}

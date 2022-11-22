@@ -10,8 +10,6 @@ COPY requirements.txt requirements.txt
 
 RUN pip3 install -U pip
 RUN pip3 install --no-cache-dir -r requirements.txt
-RUN apt update -y && \
-    apt install curl jq -y
 
 FROM builder
 

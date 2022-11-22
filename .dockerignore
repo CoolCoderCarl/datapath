@@ -17,7 +17,6 @@ README.md
 LICENSE
 
 # Configuration
-requirements.txt
 changelog.json
 settings.toml
 *.db

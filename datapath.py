@@ -32,8 +32,9 @@ NEWS_DB_API_URL = dynaconfig.settings["DB"]["DB_API_URL"]
 
 def check_api_available() -> bool:
     try:
-        logging.info(f"Try to connect to API, URL: {NEWS_DB_API_URL}")
-        return requests.get(NEWS_DB_API_URL).ok
+        logging.info(f"Try to connect to API, URL: {NEWS_DB_API_URL}/healthcheck")
+        time.sleep(1)
+        return requests.get(f"{NEWS_DB_API_URL}/healthcheck").ok
     except (ConnectionError, ConnectionRefusedError) as con_err:
         logging.error(con_err)
 

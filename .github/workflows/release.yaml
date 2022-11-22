@@ -99,19 +99,7 @@ jobs:
   build:
     name: Build packages
     needs: [ prepare, release ]
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-latest
-            SERVICENAME: news_db
-            CONTAINERFILE: Containerfile-db
-          - os: ubuntu-latest
-            SERVICENAME: truth_seeker
-            CONTAINERFILE: Containerfile-ts
-          - os: ubuntu-latest
-            SERVICENAME: datapath
-            CONTAINERFILE: Containerfile-dp
+    runs-on: ubuntu-latest
 
     steps:
 
@@ -130,8 +118,8 @@ jobs:
         with:
           context: .
           push: true
-          file: ${{ matrix.CONTAINERFILE }}
-          tags: h0d0user/${{ matrix.SERVICENAME }}:latest
+          file: Containerfile
+          tags: h0d0user/datapath:latest
 
       - name: Notify if failure
         if: ${{ failure() }}
@@ -169,9 +157,7 @@ jobs:
 
             Branch: ${{ github.ref }}
 
-            <b>Pushed image:</b> <code>docker pull h0d0user/news_db:latest</code>,
-            <code>docker pull h0d0user/truth_seeker:latest</code>,
-            <code>docker pull h0d0user/datapath:latest</code>
+            <b>Pushed image:</b> <code>docker pull h0d0user/datapath:latest</code>
             See changes: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
 
             <b>Release URL:</b> https://github.com/${{ github.repository }}/releases/tag/${{ needs.prepare.outputs.get_current_tag }}

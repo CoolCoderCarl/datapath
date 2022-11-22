@@ -5,7 +5,6 @@ from datetime import datetime
 import requests
 
 import dynaconfig
-import news_db
 
 # Time range for sending messages loaded from settings.toml
 TIME_TO_SEND_START = dynaconfig.settings["TIMINIGS"]["TIME_TO_SEND_START"]
@@ -28,6 +27,17 @@ API_TOKEN = dynaconfig.settings["TELEGRAM"]["API_TOKEN"]
 API_URL = f"https://api.telegram.org/bot{API_TOKEN}/sendMessage"
 CHAT_ID = dynaconfig.settings["TELEGRAM"]["CHAT_ID"]
 
+NEWS_DB_API_URL = dynaconfig.settings["DB"]["DB_API_URL"]
+
+
+def check_api_available() -> bool:
+    try:
+        logging.info(f"Try to connect to API, URL: {NEWS_DB_API_URL}/healthcheck")
+        time.sleep(1)
+        return requests.get(f"{NEWS_DB_API_URL}/healthcheck").ok
+    except (ConnectionError, ConnectionRefusedError) as con_err:
+        logging.error(con_err)
+
 
 def send_news_to_telegram(message):
     """
@@ -40,15 +50,15 @@ def send_news_to_telegram(message):
             API_URL,
             json={
                 "chat_id": CHAT_ID,
-                "text": f"Author: {message[0]}\n"
+                "text": f"Author: {message['author']}\n"
                 f"\n"
-                f"Title: {message[1]}\n"
+                f"Title: {message['title']}\n"
                 f"\n"
-                f"{message[2]}\n"
+                f"{message['description']}\n"
                 f"\n"
-                f"URL: {message[3]}\n"
+                f"URL: {message['url']}\n"
                 f"\n"
-                f"Date published: {message[4]}\n",
+                f"Date published: {message['pub_date']}\n",
             },
         )
         if response.status_code == 200:
@@ -64,14 +74,13 @@ def send_news_to_telegram(message):
 
 
 if __name__ == "__main__":
-    db_connection = news_db.create_connection(news_db.DB_FILE)
     while True:
-        if db_connection:
+        if check_api_available():
             time.sleep(1)
             current_time = datetime.now().strftime("%H:%M")
             if TIME_TO_SEND_START < current_time < TIME_TO_SEND_END:
                 logging.info("Time to send news has come !")
-                data_from_db = news_db.send_all_news(db_connection)
+                data_from_db = requests.get(NEWS_DB_API_URL).json()
                 if len(data_from_db) == 0:
                     logging.warning("Database is empty !")
                 else:
@@ -83,4 +92,4 @@ if __name__ == "__main__":
             else:
                 logging.info("Still waiting to send.")
         else:
-            logging.error("Connection to db is not exist !")
+            logging.error("API is not available !")

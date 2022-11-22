@@ -1,26 +1,31 @@
 version: '3'
 
 services:
-  news_db:
-    container_name: news_db
-    image: h0d0user/news_db:latest
-    pull_policy: always
-    restart: always
-    network_mode: host
-    volumes:
-      - "shared-volume:/mnt/"
-      - "./settings.toml:/opt/settings.toml"
+#  news_db:
+#    container_name: news_db
+#    image: h0d0user/news_db:latest
+#    pull_policy: always
+#    restart: always
+#    network_mode: host
+#    volumes:
+#      - "shared-volume:/mnt/"
+#      - "./settings.toml:/opt/settings.toml"
 
-  truth_seeker:
-    container_name: truth_seeker
-    image: h0d0user/truth_seeker:latest
+  epistolary:
+    container_name: epistolary
+    image: h0d0user/epistolary:latest
     pull_policy: always
     restart: always
-    network_mode: host
-    depends_on:
-      - "news_db"
+#    network_mode: host
+    networks:
+      - etl
+    hostname: epistolary
+    ports:
+      - "8888:8888"
+#    depends_on:
+#      - "news_db"
     volumes:
-      - "shared-volume:/mnt/"
+#      - "shared-volume:/mnt/"
       - "./settings.toml:/opt/settings.toml"
 
   datapath:
@@ -28,12 +33,16 @@ services:
     image: h0d0user/datapath:latest
     pull_policy: always
     restart: always
-    network_mode: host
+#    network_mode: host
+    networks:
+      - etl
     depends_on:
-      - "news_db"
+      - "epistolary"
     volumes:
-      - "shared-volume:/mnt/"
       - "./settings.toml:/opt/settings.toml"
 
 volumes:
   shared-volume:
+
+networks:
+  etl:

@@ -10,12 +10,12 @@ services:
       - etl
     ports:
       - "8888:8888"
-#    healthcheck:
-#      test: "curl http://attainments_sanctuary:8888/healthcheck | jq -r '.healthcheck'"
-#      interval: 5s
-#      timeout: 5s
-#      retries: 20
-#      start_period: 5s
+    healthcheck:
+      test: "curl http://attainments_sanctuary:8888/healthcheck | jq -r '.healthcheck'"
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
   epistolary:
     container_name: epistolary
@@ -26,7 +26,8 @@ services:
       - etl
     hostname: epistolary
     depends_on:
-      - "attainments_sanctuary"
+      attainments_sanctuary:
+        condition: service_healthy
     volumes:
       - "./settings.toml:/opt/settings.toml"
 
@@ -37,8 +38,10 @@ services:
     restart: always
     networks:
       - etl
+    hostname: datapath
     depends_on:
-      - "attainments_sanctuary"
+      attainments_sanctuary:
+        condition: service_healthy
     volumes:
       - "./settings.toml:/opt/settings.toml"
 

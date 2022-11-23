@@ -1,8 +1,9 @@
 # datapath
-Simple ETL getting info from https://newsapi.org/ and send to telegram channel
+Send info getting from API to telegram.  
+Third part of a system which search, save and share info.  
 
 ## Prehistory
-This simple service help to search information automatically via News API
+It is good idea to share info.
 
 > Datapath it is like telepath or astropath  
 > (c) Author
@@ -15,7 +16,7 @@ Need to fill `settings.toml` with next important variables:
 2) `QUERY`. Key word to search for in articles.
 3) `API_TOKEN`. Ask *BotFather* in telegram.
 4) `CHAT_ID`. Use this to find chat ID where you want to send messages - https://api.telegram.org/botAPI_TOKEN/getUpdates
-5) `docker-compose up -d`
+5) `docker-compose up -d` or `make dstart`
 6) ...
 7) PROFIT !!!
 
@@ -33,7 +34,6 @@ API_TOKEN = ""
 CHAT_ID = ""
 
 [TIMINIGS]
-TIME_TO_PURGE = "00:00"
 TIME_TO_SEARCH = "02:00"
 TIME_TO_SEND_START = "10:00"
 TIME_TO_SEND_END = "20:00"

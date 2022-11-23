@@ -81,16 +81,31 @@ if __name__ == "__main__":
             current_time = datetime.now().strftime("%H:%M")
             if TIME_TO_SEND_START < current_time < TIME_TO_SEND_END:
                 logging.info("Time to send news has come !")
-                data_from_db = requests.get(f"{NEWS_DB_API_URL}/news").json()
-                if not data_from_db:
+                entities = requests.get(f"{API_URL}/entities")
+                if entities == 0:
                     logging.warning("Database is empty !")
+                    time.sleep(5)
                 else:
-                    for news in data_from_db:
-                        send_news_to_telegram(news)
-                        time.sleep(SENDING_INTERVAL)
-                    else:
-                        logging.warning("All news was sent !")
+                    try:
+                        data_from_db = requests.get(f"{NEWS_DB_API_URL}/news").json()
+                        for news in data_from_db:
+                            send_news_to_telegram(news)
+                            time.sleep(SENDING_INTERVAL)
+                        else:
+                            logging.warning(
+                                f"All news was sent ! Going to purge ! Entities in DB for now {entities}."
+                            )
+                            try:
+                                response = requests.get(f"{NEWS_DB_API_URL}/purge")
+                            except Exception as exception:
+                                logging.error(f"Exception while purging: {exception}")
+                            else:
+                                logging.info("Database purged successfully !")
+                    except Exception as exception:
+                        logging.error(f"Exception while getting news: {exception}")
             else:
                 logging.info("Still waiting to send.")
+                time.sleep(5)
         else:
             logging.error("API is not available !")
+            time.sleep(5)

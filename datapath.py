@@ -74,17 +74,24 @@ def send_news_to_telegram(message):
         logging.error(err)
 
 
+def ask_entities() -> int:
+    """
+    Ask API request to discover how much entities in db
+    Return int instead of str
+    :return:
+    """
+    return int(requests.get(f"{NEWS_DB_API_URL}/entities").text)
+
+
 if __name__ == "__main__":
     while True:
         if check_api_available():
-            time.sleep(1)
             current_time = datetime.now().strftime("%H:%M")
             if TIME_TO_SEND_START < current_time < TIME_TO_SEND_END:
                 logging.info("Time to send news has come !")
-                entities = requests.get(f"{API_URL}/entities")
-                if entities == 0:
-                    logging.warning("Database is empty !")
-                    time.sleep(5)
+                if ask_entities() == 0:
+                    logging.warning("Database is empty ! Take a break for 30 min.")
+                    time.sleep(1800)
                 else:
                     try:
                         data_from_db = requests.get(f"{NEWS_DB_API_URL}/news").json()
@@ -93,14 +100,16 @@ if __name__ == "__main__":
                             time.sleep(SENDING_INTERVAL)
                         else:
                             logging.warning(
-                                f"All news was sent ! Going to purge ! Entities in DB for now {entities}."
+                                f"All news was sent ! Going to purge ! Entities in db for now {ask_entities()}."
                             )
                             try:
                                 response = requests.get(f"{NEWS_DB_API_URL}/purge")
                             except Exception as exception:
-                                logging.error(f"Exception while purging: {exception}")
+                                logging.error(f"Exception while purging: {exception}.")
                             else:
-                                logging.info("Database purged successfully !")
+                                logging.info(
+                                    f"Database was purged successfully ! Entities in db for now {ask_entities()}."
+                                )
                     except Exception as exception:
                         logging.error(f"Exception while getting news: {exception}")
             else:
